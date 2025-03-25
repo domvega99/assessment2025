@@ -45,5 +45,8 @@
         }
       }
     }
+  },
+  "devDependencies": {
+    "@nrwl/nest": "^19.8.4"
   }
 }
