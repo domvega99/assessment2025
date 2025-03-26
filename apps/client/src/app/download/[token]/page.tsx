@@ -3,6 +3,8 @@ import { User } from '@/app/interfaces/user.interface';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+const API_BASE_URL = process.env.API_BASE_URL;
+
 const Page = () => {
   const { token } = useParams(); 
   const [message, setMessage] = useState<string>('');
@@ -14,7 +16,7 @@ const Page = () => {
     if (token) {
       const confirmDownload = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/api/download/confirm/${token}`);
+          const response = await fetch(`${API_BASE_URL}/download/confirm/${token}`);
           
           if (!response.ok) {
             if (response.status === 401) {
@@ -45,7 +47,7 @@ const Page = () => {
     const password = (event.target as HTMLFormElement).password.value;
 
     try {
-      const response = await fetch('http://localhost:3001/api/data/login', {
+      const response = await fetch(`${API_BASE_URL}/data/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

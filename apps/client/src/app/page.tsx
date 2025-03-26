@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
+const API_BASE_URL = process.env.API_BASE_URL;
 
 interface DownloadLink {
   link: string;
@@ -12,7 +13,7 @@ export default function Index() {
 
   const generateLink = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/download/generate");
+      const response = await fetch(`${API_BASE_URL}/download/generate`);
 
       if (response.ok) {
         const data: DownloadLink = await response.json(); 
