@@ -1,42 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  Controller,
+  Post
 } from '@nestjs/common';
+import { User } from '../../models/user.model';
 import { DataService } from './data.service';
-import { CreateDatumDto } from './dto/create-datum.dto';
-import { UpdateDatumDto } from './dto/update-datum.dto';
 
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}
 
-  @Post()
-  create(@Body() createDatumDto: CreateDatumDto) {
-    return this.dataService.create(createDatumDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.dataService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dataService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDatumDto: UpdateDatumDto) {
-    return this.dataService.update(+id, updateDatumDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dataService.remove(+id);
+  // to login user, for more advance ( use hashed password, and token for single user )
+  @Post('login')
+  login(@Body() loginDto: { email: string; password: string }): User | { message: string } {
+    const { email, password } = loginDto;
+    const user = this.dataService.validateUser(email, password);
+    if (!user) {
+      return { message: 'Invalid email or password' };
+    }
+    return user;
   }
 }

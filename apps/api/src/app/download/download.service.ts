@@ -1,24 +1,23 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
-import { DataService } from '../data/data.service';
 
 @Injectable()
 export class DownloadService {
-  private SECRET_KEY = 'your-secret-key';
+  private SECRET_KEY = 'your-secret-key'; // you can move this to .env for more secure
 
-  constructor(private readonly mockDataService: DataService) {}
+  generateDownloadLink(): string {
+    const payload = {
+      userId: 1, // assume user id
+      productId: 1, // assume product id
+      orderId: 1 // assume order id
+    };
 
-  generateDownloadLink(userId: string, productId: string): string {
-    const order = this.mockDataService.getOrderByUserAndProduct(userId, productId);
-    if (!order) {
-      throw new UnauthorizedException('You have not purchased this report.');
-    }
-
-    const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60; // 1-hour expiry
-    return sign({ userId, productId, exp: expirationTime }, this.SECRET_KEY);
+    const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60; // 1 hour expiration
+    // const expirationTime = Math.floor(Date.now() / 1000) + 20; // 20 secs expiration
+    return sign({ payload, exp: expirationTime }, this.SECRET_KEY);
   }
 
-  validateDownloadToken(token: string) {
+  validateDownloadToken(token: string) { // to validate the token
     try {
       return verify(token, this.SECRET_KEY);
     } catch (err) {
