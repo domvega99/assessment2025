@@ -1,6 +1,10 @@
 # Assessment
 
-Installation
+# Tech
+
+Nx Monorepo, NestJs, NextJs
+
+## Installation
 
 ```sh
 npm install --legacy-peer-deps
@@ -22,6 +26,7 @@ nx dev client
 
 Create .env file and copy this:
 ```sh
+API_BASE_URL=http://localhost:3001/api
 WEBSITE_URL=http://localhost:3000
 SECRET_KEY=your-secret-key
 ```
@@ -29,11 +34,13 @@ SECRET_KEY=your-secret-key
 Mock User Data:
 
 ```sh
+id=1
 email=john@gmail.com
 password=hashedpassword123
 ```
 
 ```sh
+id=2
 email=jane@gmail.com
 password=hashedpassword456
 ```
