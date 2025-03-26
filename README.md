@@ -20,6 +20,12 @@ To run the dev client for your app, use:
 nx dev client
 ```
 
+Create .env file and copy this:
+```sh
+WEBSITE_URL=http://localhost:3000
+SECRET_KEY=your-secret-key
+```
+
 ## System Flow
 Token Generation and Expiration:
 

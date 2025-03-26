@@ -1,11 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { sign, verify } from 'jsonwebtoken';
 
 @Injectable()
 export class DownloadService {
-  private SECRET_KEY = 'your-secret-key'; // you can move this to .env for more secure
+  constructor(private readonly configService: ConfigService) {}
 
   generateDownloadLink(): string {
+    const secretKey = this.configService.get<string>('SECRET_KEY');
+    if (!secretKey) {
+      throw new Error('SECRET_KEY is not defined in the environment variables');
+    }
+
     const payload = {
       userId: 1, // assume user id
       productId: 1, // assume product id
@@ -14,12 +20,17 @@ export class DownloadService {
 
     const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60; // 1 hour expiration
     // const expirationTime = Math.floor(Date.now() / 1000) + 20; // 20 secs expiration
-    return sign({ payload, exp: expirationTime }, this.SECRET_KEY);
+    
+    return sign({ payload, exp: expirationTime }, secretKey);
   }
 
   validateDownloadToken(token: string) { // to validate the token
+    const secretKey = this.configService.get<string>('SECRET_KEY');
+    if (!secretKey) {
+      throw new Error('SECRET_KEY is not defined in the environment variables');
+    }
     try {
-      return verify(token, this.SECRET_KEY);
+      return verify(token, secretKey);
     } catch (err) {
       throw new UnauthorizedException('Invalid or expired download link.');
     }
